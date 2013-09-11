@@ -1,0 +1,81 @@
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
+
+
+<div ng-app="Jobs">
+    <div ng-controller="SettingsCtrl">
+        <h3>Scheduled Job Code</h3>
+        <div class="two-column-container">
+            <div class="main-column">
+                <div class="well stacked">
+                    <form class="form-horizontal" id="settings-form" ng-submit="submit()">
+                        <div class="control-group">
+                            <div class="editor-container">
+                                <div ui-ace="{
+                              theme:'deployd',
+                              mode: 'javascript'
+                            }" ng-model="code"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" id="save-button-container">
+                            <a class="btn btn-primary" type="button" id="run-button" ng-click="runScript()"><i class="icon-white icon-play" ></i> Run</a>
+                            <button class="btn btn-success" id="save-button"><i class="icon-white icon-download"></i> Save</button>
+                            <button class="btn" type="button" id="cancel-button"><i class="icon-remove"></i> Cancel</button>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+            <div class="side-column">
+                <div class="well">
+                    <h3>Logs</h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Date</th>
+                            <th>Message</th>
+                        </tr>
+                        <tr ng-repeat="entry in logEntries">
+                            <td>
+                                {{entry.date | date:'yyyy-MM-dd HH:mm:ss'}}
+                            </td>
+                            <td>
+                                {{entry.message}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        angular.module('Jobs', ['ui.ace']);
+
+        function SettingsCtrl($scope) {
+            var fileName = Context.resourceId + ".js";
+            dpd('__resources').get(Context.resourceId + '/' + fileName, function(res, err) {
+                $scope.$apply(function() {
+                    $scope.code   = res && res.value;
+                });
+            });
+            $scope.submit = function() {
+                dpd('__resources').post(Context.resourceId + '/' + fileName, {value: $scope.code}, function(res, err) {
+
+                });
+            }
+            $scope.runScript = function() {
+                var fileNameTemp = "draft.js";
+                dpd('__resources').post(Context.resourceId + '/' + fileNameTemp, {value: $scope.code},function(res, err) {
+                    dpd(Context.resourceId).post( {file : "draft"}, function() {
+                        dpd(Context.resourceId).get({ $sort: {"date": -1}},  function(res, error) {
+                            $scope.logEntries = res;
+                            $scope.$apply();
+                        });
+                    })
+                });
+            }}
+
+
+    </script>

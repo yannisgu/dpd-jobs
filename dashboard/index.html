@@ -1,0 +1,49 @@
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
+
+
+
+<div class="well hide" id="basic-dashboard" style="display: block;" ng-app="Jobs">
+  <div ng-controller="SettingsCtrl">
+    <h3>Scheduled Job Code</h3>
+    <form class="form-horizontal" id="settings-form" ng-submit="submit()">
+        <div class="control-group">
+            <div class="editor-container">
+                <div ui-ace="{
+                          theme:'deployd',
+                          mode: 'javascript'
+                        }" ng-model="code"></div>
+            </div>
+        </div>
+
+        <div class="form-actions" id="save-button-container">
+            <button class="btn btn-success" id="save-button"><i class="icon-white icon-download"></i> Save</button>
+            <button class="btn" type="button" id="cancel-button"><i class="icon-remove"></i> Cancel</button>
+        </div>
+
+
+    </form>
+</div>
+
+<script>
+    angular.module('Jobs', ['ui.ace']);
+
+  function SettingsCtrl($scope) {
+     var fileName = Context.resourceId + ".js";
+      dpd('__resources').get(Context.resourceId + '/' + fileName, function(res, err) {
+          $scope.$apply(function() {
+              $scope.code   = res && res.value;
+          });
+    });
+      $scope.submit = function() {
+          dpd('__resources').post(Context.resourceId + '/' + fileName, {value: $scope.code}, function(res, err) {
+
+          });
+      }
+
+
+
+
+    }
+    
+
+</script>
