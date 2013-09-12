@@ -1,0 +1,27 @@
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
+
+
+<div class="well" ng-app>
+    <div ng-controller="LogsCtrl">
+        <h3>Run logs</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>Date</th>
+                <th>Message</th>
+                <th>Source</th>
+            </tr>
+            <tr ng-repeat="entry in logEntries">
+                <td>
+                    {{entry.date | date:'yyyy-MM-dd HH:mm:ss'}}
+                </td>
+                <td>
+                    {{entry.message}}
+                </td>
+                <td>
+                    {{entry.source}}
+                </td>
+            </tr>
+        </table>
+        <pagination total-items="totalItems" page="currentPage"></pagination>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 var Resource = require('deployd/lib/resource')  ,
-    Script = require('deployd/lib/script')
+    Script = require('deployd/lib/script') ,
+    schedule = require('node-schedule')
   , util = require('util')
   , path = require('path')
     ,fs = require("fs")
@@ -8,6 +9,8 @@ var Resource = require('deployd/lib/resource')  ,
 function Jobs() {
     Resource.apply(this, arguments);
     this.store = process.server.createStore(this.name + "jobs-log");
+    this.initCron();
+
 }
 module.exports = Jobs;
 util.inherits(Jobs, Resource);
@@ -20,8 +23,30 @@ Jobs.dashboard = {
         '/js/ui-ace.js'
     ],
     pages : [
-        "config","code"
+        "config","code" , "logs"
     ]
+}
+
+
+
+//this.scheduledJob.stop();
+Jobs.prototype.initCron = function() {
+    if(!process.server.scheduledJobs) {
+        process.server.scheduledJobs = {};
+    }
+
+    if(!process.server.scheduledJobs[this.name])  {
+        if(this.config.cron){
+            var self = this;
+            this.scheduledJob = schedule.scheduleJob(this.config.cron, function(){
+                self.runScript(self.name);
+            });
+            console.log(this.scheduledJob.nextInvocation())
+            process.server.scheduledJobs[this.name] = this.scheduledJob;
+        }
+    }
+
+
 }
 
 
@@ -50,7 +75,7 @@ Jobs.prototype.runScript = function(file, callback) {
     var configPath = this.options.configPath;
     var script = Script.load(this.options.configPath  + "/" + file + ".js", function(err, script) {
         var domain = {};
-        domain.console = console;
+        domain.console = {};
         domain.console.log = function(message) {
             self.log(message, file, "log");
         };
@@ -65,11 +90,13 @@ Jobs.prototype.runScript = function(file, callback) {
         };
 
         //console.log("here");
-        script.run({}, {},function(err, result) {
-            if(err) {
-                self.log(err, file, "error") ;
+        script.run({}, domain,function(error, result) {
+            if(error) {
+                self.log(error.message, file, "error") ;
             }
-            callback(err, result);
+            if(callback) {
+                callback(error, result);
+            }
 
         });
     });
@@ -78,7 +105,7 @@ Jobs.prototype.runScript = function(file, callback) {
 Jobs.prototype.log = function(message, source, type) {
     var item = {
         message: message,
-        date: new Date(),
+        date: (new Date()).getTime(),
         source: source,
         type: type
     }

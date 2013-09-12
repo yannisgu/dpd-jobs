@@ -1,49 +1,26 @@
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
 
 
+<div class="well" ng-app>
+    <div ng-controller="SettingsCtrl">
+        <h3>Scheduled Job Code</h3>
+        <form class="form-horizontal" id="settings-form" ng-submit="submit()">
+            <div class="control-group">
+                <label class="control-label code" for="prop-cron">cron defintion</label>
+                <div class="controls">
+                    <input type="text" id="prop-cron" ng-model="cron" title="Enter a valid cron definition " pattern="^(((([\*]{1}){1})|((\*\/){0,1}(([0-9]{1}){1}|(([1-5]{1}){1}([0-9]{1}){1}){1}))) ((([\*]{1}){1})|((\*\/){0,1}(([0-9]{1}){1}|(([1]{1}){1}([0-9]{1}){1}){1}|([2]{1}){1}([0-3]{1}){1}))) ((([\*]{1}){1})|((\*\/){0,1}(([1-9]{1}){1}|(([1-2]{1}){1}([0-9]{1}){1}){1}|([3]{1}){1}([0-1]{1}){1}))) ((([\*]{1}){1})|((\*\/){0,1}(([1-9]{1}){1}|(([1-2]{1}){1}([0-9]{1}){1}){1}|([3]{1}){1}([0-1]{1}){1}))|(jan|feb|mar|apr|may|jun|jul|aug|sep|okt|nov|dec)) ((([\*]{1}){1})|((\*\/){0,1}(([0-7]{1}){1}))|(sun|mon|tue|wed|thu|fri|sat)))$" />
 
-<div class="well hide" id="basic-dashboard" style="display: block;" ng-app="Jobs">
-  <div ng-controller="SettingsCtrl">
-    <h3>Scheduled Job Code</h3>
-    <form class="form-horizontal" id="settings-form" ng-submit="submit()">
-        <div class="control-group">
-            <div class="editor-container">
-                <div ui-ace="{
-                          theme:'deployd',
-                          mode: 'javascript'
-                        }" ng-model="code"></div>
+                    <p class="help-block">The cron definition when the job should be run. (e.g. "*/5 * * * *" for every five minute)</p>
+
+                </div>
             </div>
-        </div>
 
-        <div class="form-actions" id="save-button-container">
-            <button class="btn btn-success" id="save-button"><i class="icon-white icon-download"></i> Save</button>
-            <button class="btn" type="button" id="cancel-button"><i class="icon-remove"></i> Cancel</button>
-        </div>
+            <div class="form-actions" id="save-button-container">
+                <button class="btn btn-success" id="save-button"><i class="icon-white icon-download"></i> Save</button>
+                <button class="btn" type="button" id="cancel-button"><i class="icon-remove"></i> Cancel</button>
+            </div>
 
 
-    </form>
+        </form>
+    </div>
 </div>
-
-<script>
-    angular.module('Jobs', ['ui.ace']);
-
-  function SettingsCtrl($scope) {
-     var fileName = Context.resourceId + ".js";
-      dpd('__resources').get(Context.resourceId + '/' + fileName, function(res, err) {
-          $scope.$apply(function() {
-              $scope.code   = res && res.value;
-          });
-    });
-      $scope.submit = function() {
-          dpd('__resources').post(Context.resourceId + '/' + fileName, {value: $scope.code}, function(res, err) {
-
-          });
-      }
-
-
-
-
-    }
-    
-
-</script>
