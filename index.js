@@ -1,10 +1,10 @@
 var Resource = require('deployd/lib/resource')  ,
     Script = require('deployd/lib/script') ,
-    schedule = require('node-schedule')
-  , util = require('util')
-  , path = require('path')
-    ,fs = require("fs")
-  , log = function() {}
+    internalClient = require('deployd/lib/internal-client') ,
+    schedule = require('node-schedule') ,
+    util = require('util') ,
+    path = require('path')  ,
+    fs = require("fs");
 
 function Jobs() {
     Resource.apply(this, arguments);
@@ -15,7 +15,7 @@ function Jobs() {
 module.exports = Jobs;
 util.inherits(Jobs, Resource);
 
-Jobs.label = "Scheduled Jobs";
+Jobs.label = "Scheduled Job";
 
 Jobs.dashboard = {
     path: path.join(__dirname, 'dashboard') ,
@@ -73,28 +73,33 @@ Jobs.prototype.handle = function (ctx, next) {
 Jobs.prototype.runScript = function(file, callback) {
     var self = this;
     var configPath = this.options.configPath;
-    var script = Script.load(this.options.configPath  + "/" + file + ".js", function(err, script) {
+    var script;
+    script = Script.load(this.options.configPath + "/" + file + ".js", function (err, script) {
         var domain = {};
         domain.console = {};
-        domain.console.log = function(message) {
+        domain.console.log = function (message) {
             self.log(message, file, "log");
         };
-        domain.console.info = function(message) {
+        domain.console.info = function (message) {
             self.log(message, file, "info");
         };
-        domain.console.warn = function(message) {
+        domain.console.warn = function (message) {
             self.log(message, file, "warn");
         };
-        domain.console.error = function(message) {
+        domain.console.error = function (message) {
             self.log(message, file, "error");
         };
 
-        //console.log("here");
-        script.run({}, domain,function(error, result) {
-            if(error) {
-                self.log(error.message, file, "error") ;
+
+        var ctx = {};
+
+        ctx.dpd = internalClient.build(process.server);
+
+        script.run(ctx, domain, function (error, result) {
+            if (error) {
+                self.log(error.message, file, "error");
             }
-            if(callback) {
+            if (callback) {
                 callback(error, result);
             }
 
