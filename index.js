@@ -4,6 +4,7 @@ var Resource = require('deployd/lib/resource')  ,
     schedule = require('node-schedule') ,
     util = require('util') ,
     path = require('path')  ,
+    request = require('request'),
     fs = require("fs");
 
 function Jobs() {
@@ -89,6 +90,7 @@ Jobs.prototype.runScript = function(file, callback) {
         domain.console.error = function (message) {
             self.log(message, file, "error");
         };
+        domain.request = request;
 
 
         var ctx = {};
