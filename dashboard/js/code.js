@@ -22,7 +22,7 @@ function SettingsCtrl($scope) {
 
     function loadLogs() {
         dpd(Context.resourceId).post( {file : "draft"}, function() {
-            dpd(Context.resourceId).get( { date: {$gt: startDate.getTime()}, $sort: {"date": -1}},  function(res, error) {
+            dpd(Context.resourceId).get("logs", { date: {$gt: startDate.getTime()}, $sort: {"date": -1}},  function(res, error) {
                 $scope.logEntries = res;
                 $scope.$apply();
             });

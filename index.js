@@ -10,7 +10,7 @@ var Resource = require('deployd/lib/resource')  ,
 function Jobs() {
     Resource.apply(this, arguments);
     this.store = process.server.createStore(this.name + "jobs-log");
-    this.initCron();
+    this.initCron(this.name, this.config.cron);
 
 }
 module.exports = Jobs;
@@ -31,28 +31,42 @@ Jobs.dashboard = {
 
 
 //this.scheduledJob.stop();
-Jobs.prototype.initCron = function() {
+Jobs.prototype.initCron = function(name, cron) {
     if(!process.server.scheduledJobs) {
         process.server.scheduledJobs = {};
     }
 
-    if(!process.server.scheduledJobs[this.name])  {
-        if(this.config.cron){
-            var self = this;
-            this.scheduledJob = schedule.scheduleJob(this.config.cron, function(){
-                self.runScript(self.name);
+    if(!process.server.scheduledJobs[name])  {
+        if(cron){
+            this.scheduledJob = schedule.scheduleJob(cron, function(){
+                self.runScript(name);
             });
-            console.log(this.scheduledJob.nextInvocation())
-            process.server.scheduledJobs[this.name] = this.scheduledJob;
+            this.setScheduledJob(this.scheduledJob);
         }
     }
 
 
 }
 
+Jobs.prototype.getScheduledJob = function() {
+    return process.server.scheduledJobs[this.name];
+}
+
+Jobs.prototype.setScheduledJob = function(job) {
+    process.server.scheduledJobs[this.name] = this.scheduledJob;
+}
+
+Jobs.prototype.getNextInvocation = function() {
+    var job = this.getScheduledJob();
+    if(job){
+        return job.nextInvocation();
+    }
+}
+
 
 Jobs.prototype.handle = function (ctx, next) {
     if(ctx.req.isRoot) {
+        var command = ctx.url.split('/').filter(function(p) { return p; })[0];
         switch(ctx.method) {
             case "POST":
                 var file = ctx.body.file;
@@ -63,10 +77,19 @@ Jobs.prototype.handle = function (ctx, next) {
                 this.runScript(file, ctx.done);
                 break;
             case "GET":
-                this.store.find(ctx.query, function(err, result) {
-                    ctx.done(err, result);
-                })
-                break;
+                switch (command) {
+                    case "logs":
+                        this.store.find(ctx.query, function(err, result) {
+                            ctx.done(err, result);
+                        })
+                        break;
+                    default:
+                        ctx.done(null,{
+                            nextInvocation: this.getNextInvocation()
+                        });
+                        break;
+                }
+                 break;
         }
     }
 }
@@ -133,6 +156,15 @@ Jobs.prototype.configChanged = function(config, fn) {
 
         });
         return;
+    }
+
+    if(config.cron !== this.config.cron) {
+        var job = this.getScheduledJob();
+        if(job) {
+            job.cancel();
+            this.setScheduledJob(null);
+            this.initCron(this.name, config.cron)  ;
+        }
     }
 
     fn(null);
