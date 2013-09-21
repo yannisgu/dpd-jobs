@@ -19,7 +19,8 @@
       "request": ""
   },
     "devDependencies": {
-        "grunt-cli": ""
+        "grunt-cli": ""   ,
+        "grunt": ""
     },
   "readmeFilename": "README.md"
 }
