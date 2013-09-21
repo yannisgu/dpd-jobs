@@ -109,6 +109,31 @@ Jobs.prototype.runScript = function(file, callback) {
     });
 }
 
+Jobs.prototype.configChanged = function(config, fn) {
+    var store = this.store;
+    var configPath =  this.options.configPath;
+    var name = this.name;
+
+    var properties = config && config.properties;
+         console.log(config.id)
+    if(config.id && config.id !== this.name) {
+        console.log("rename store")
+        store.rename(config.id.replace('/', '')  + "jobs-log", function (err) {
+            console.log(err);
+            fs.rename(configPath + "/" + name + ".js", configPath + "/" + config.id.replace('/', '') + ".js", function(err){
+                console.log(err)
+                fn(err)
+            });
+
+
+        });
+        return;
+    }
+
+    fn(null);
+};
+
+
 Jobs.prototype.log = function(message, source, type) {
     var item = {
         message: message,
