@@ -10,4 +10,4 @@ env:
     secure: hISElt/5MPvF91O1lmlKXrdG9UI//YqpDZZea8rn9D6X8GfcBXaekCycBftUxqYJDgQYhWXt8sbERNnVo1i9xs2hCBhYqMlTW0peLLE9kaRAAMYhxrUPSUF4NyRzHfIEXrosQCiODbLaeFEtYIT3P41jHmLxWGkE3iLnX2JSwCs=
 
 
-script: grunt publish
+script: ./node_modules/.bin/grunt publish
