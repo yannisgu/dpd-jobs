@@ -20,7 +20,8 @@
   },
     "devDependencies": {
         "grunt-cli": ""   ,
-        "grunt": ""
+        "grunt": ""  ,
+        "npm": ""
     },
   "readmeFilename": "README.md"
 }
