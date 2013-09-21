@@ -1,6 +1,6 @@
 {
   "name": "dpd-jobs",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "provides functionality to create and manage scheduled jobs in a deployd app",
   "main": "index.js",
   "scripts": {
@@ -18,5 +18,8 @@
       "node-schedule": "",
       "request": ""
   },
+    "devDependencies": {
+        "grunt": ""
+    },
   "readmeFilename": "README.md"
 }

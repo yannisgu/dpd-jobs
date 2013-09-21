@@ -76,36 +76,41 @@ Jobs.prototype.runScript = function(file, callback) {
     var configPath = this.options.configPath;
     var script;
     script = Script.load(this.options.configPath + "/" + file + ".js", function (err, script) {
-        var domain = {};
-        domain.console = {};
-        domain.console.log = function (message) {
-            self.log(message, file, "log");
-        };
-        domain.console.info = function (message) {
-            self.log(message, file, "info");
-        };
-        domain.console.warn = function (message) {
-            self.log(message, file, "warn");
-        };
-        domain.console.error = function (message) {
-            self.log(message, file, "error");
-        };
-        domain.request = request;
+        if(!err) {
+            var domain = {};
+            domain.out = {};
+            domain.out.log = function (message) {
+                self.log(message, file, "log");
+            };
+            domain.out.info = function (message) {
+                self.log(message, file, "info");
+            };
+            domain.out.warn = function (message) {
+                self.log(message, file, "warn");
+            };
+            domain.out.error = function (message) {
+                self.log(message, file, "error");
+            };
+            domain.request = request;
 
 
-        var ctx = {};
+            var ctx = {};
 
-        ctx.dpd = internalClient.build(process.server);
+            ctx.dpd = internalClient.build(process.server);
 
-        script.run(ctx, domain, function (error, result) {
-            if (error) {
-                self.log(error.message, file, "error");
-            }
-            if (callback) {
-                callback(error, result);
-            }
+            script.run(ctx, domain, function (error, result) {
+                if (error) {
+                    self.log(error.message, file, "error");
+                }
+                if (callback) {
+                    callback(error, result);
+                }
 
-        });
+            });
+        }
+        else {
+            self.log(err, "system", "error");
+        }
     });
 }
 
