@@ -1,4 +1,4 @@
-## dpd-jobs
+## dpd-jobs [![Build Status](https://travis-ci.org/yannisgu/dpd-jobs.png?branch=master)](https://travis-ci.org/yannisgu/dpd-jobs)
 
 provides functionality to create and manage scheduled jobs in a deployd app
 
