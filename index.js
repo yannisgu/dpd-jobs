@@ -17,6 +17,7 @@ module.exports = Jobs;
 util.inherits(Jobs, Resource);
 
 Jobs.label = "Scheduled Job";
+Jobs.prototype.clientGeneration = true;
 
 Jobs.dashboard = {
     path: path.join(__dirname, 'dashboard') ,
@@ -39,7 +40,15 @@ Jobs.prototype.initCron = function(name, cron) {
     if(!process.server.scheduledJobs[name])  {
         if(cron){
             this.scheduledJob = schedule.scheduleJob(cron, function(){
-                self.runScript(name);
+                var resources =     process.server.resources;
+                for(var i = 0; i < resources.length; i++){
+                    if(resources[i].name == name) {
+                        var resource = resources[i];
+                        resource.runScript(name, function() {
+
+                        });
+                    }
+                }
             });
             this.setScheduledJob(this.scheduledJob);
         }
@@ -91,6 +100,9 @@ Jobs.prototype.handle = function (ctx, next) {
                 }
                  break;
         }
+    }
+    else {
+        ctx.done("You have to be root.")
     }
 }
 
