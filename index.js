@@ -127,7 +127,7 @@ Jobs.prototype.runScript = function(file, callback) {
                 self.log(message, file, "error");
             };
             domain.request = request;
-
+            domain.require = require;
 
             var ctx = {};
 
