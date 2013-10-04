@@ -135,7 +135,14 @@ Jobs.prototype.runScript = function(file, callback) {
 
             script.run(ctx, domain, function (error, result) {
                 if (error) {
-                    self.log(error.message, file, "error");
+                    console.log(error);
+                    var message = "Error in job '"  + self.name + "': \n";
+                    message = error.message;
+                    if(error.stack){
+                        message += "\n\n =============\n\n" + error.stack;
+                    }
+                    console.log(error);
+                    self.log(error, file, "error");
                 }
                 if (callback) {
                     callback(error, result);
@@ -155,13 +162,10 @@ Jobs.prototype.configChanged = function(config, fn) {
     var name = this.name;
 
     var properties = config && config.properties;
-         console.log(config.id)
     if(config.id && config.id !== this.name) {
         console.log("rename store")
         store.rename(config.id.replace('/', '')  + "jobs-log", function (err) {
-            console.log(err);
             fs.rename(configPath + "/" + name + ".js", configPath + "/" + config.id.replace('/', '') + ".js", function(err){
-                console.log(err)
                 fn(err)
             });
 
