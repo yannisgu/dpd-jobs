@@ -1,6 +1,6 @@
 {
   "name": "dpd-jobs",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "provides functionality to create and manage scheduled jobs in a deployd app",
   "main": "index.js",
   "scripts": {
