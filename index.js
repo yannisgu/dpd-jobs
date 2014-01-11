@@ -40,16 +40,19 @@ Jobs.prototype.initCron = function(name, cron) {
     if(!process.server.scheduledJobs[name])  {
         if(cron){
             this.scheduledJob = schedule.scheduleJob(cron, function(){
+                
                 var resources =     process.server.resources;
-                for(var i = 0; i < resources.length; i++){
-                    if(resources[i].name == name) {
-                        var resource = resources[i];
-                        resource.runScript(name, function() {
+                if(resources)
+                    for(var i = 0; i < resources.length; i++){
+                        if(resources[i].name == name) {
+                            var resource = resources[i];
+                            resource.runScript(name, function() {
 
-                        });
+                             });
+                        }
                     }
                 }
-            });
+            }); 
             this.setScheduledJob(this.scheduledJob);
         }
     }
