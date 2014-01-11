@@ -42,7 +42,7 @@ Jobs.prototype.initCron = function(name, cron) {
             this.scheduledJob = schedule.scheduleJob(cron, function(){
                 
                 var resources =     process.server.resources;
-                if(resources)
+                if(resources) {
                     for(var i = 0; i < resources.length; i++){
                         if(resources[i].name == name) {
                             var resource = resources[i];
