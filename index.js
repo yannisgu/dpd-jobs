@@ -22,6 +22,7 @@ Jobs.prototype.clientGeneration = true;
 Jobs.dashboard = {
     path: path.join(__dirname, 'dashboard') ,
     scripts: [
+        '/js/angular.min.js',
         '/js/ui-ace.js'
     ],
     pages : [
@@ -40,7 +41,7 @@ Jobs.prototype.initCron = function(name, cron) {
     if(!process.server.scheduledJobs[name])  {
         if(cron){
             this.scheduledJob = schedule.scheduleJob(cron, function(){
-                
+
                 var resources =     process.server.resources;
                 if(resources) {
                     for(var i = 0; i < resources.length; i++){
@@ -52,7 +53,7 @@ Jobs.prototype.initCron = function(name, cron) {
                         }
                     }
                 }
-            }); 
+            });
             this.setScheduledJob(this.scheduledJob);
         }
     }
@@ -200,5 +201,3 @@ Jobs.prototype.log = function(message, source, type) {
     this.store.insert(item, function() {
     })
 }
-
-
