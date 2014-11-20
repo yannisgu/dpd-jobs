@@ -3,9 +3,6 @@
   "version": "0.0.12",
   "description": "provides functionality to create and manage scheduled jobs in a deployd app",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com:yannisgu/dpd-jobs.git"
