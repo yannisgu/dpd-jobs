@@ -7,4 +7,4 @@ branches:
 script: ./node_modules/.bin/grunt publish
 env:
   global:
-    secure: uRzi1LwrMqZF7zLkfiduf2E9ht3wyX+2eBB77NEszuKs5eUHLcoetE4aXxHucrEIHcGKAqXJz8IJitRvFek2FN/yNkiSNJ2S2zCtla7EfKGTjHe7HfyD4muh7KEA8DQyxRMTNsNbYeOIbvMSHOJXyjZ+NYklSOgxXeADjgCGI5E=
+  - secure: Ab6jf3s9srHxwH81gsJZgh3DW+TtiupaoTnoxXc2430mvQL7xVGuTV/uacpmOcZSUTNdE7j92b8bV9zG8qCAwwAvo30OdaIb+ez704bjc2lFjPnkoIA8ZSWLgOa+990aIbKGQTurA6IEnUsm1WDVl/YoixSQj5Ij3l5tIti43+8=
