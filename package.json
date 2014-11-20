@@ -18,10 +18,5 @@
       "node-schedule": "",
       "request": ""
   },
-    "devDependencies": {
-        "grunt-cli": ""   ,
-        "grunt": ""  ,
-        "npm": ""
-    },
   "readmeFilename": "README.md"
 }

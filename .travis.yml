@@ -1,10 +1,10 @@
 language: node_js
 node_js:
 - '0.10'
-branches:
-  only:
-  - master
-script: ./node_modules/.bin/grunt publish
-env:
-  global:
-  - secure: Ab6jf3s9srHxwH81gsJZgh3DW+TtiupaoTnoxXc2430mvQL7xVGuTV/uacpmOcZSUTNdE7j92b8bV9zG8qCAwwAvo30OdaIb+ez704bjc2lFjPnkoIA8ZSWLgOa+990aIbKGQTurA6IEnUsm1WDVl/YoixSQj5Ij3l5tIti43+8=
+deploy:
+  provider: npm
+  email: me@yannisguedel.ch
+  on:
+    tags: true
+  api_key:
+    secure: v78KH78Cd3p692WF3qoOMK4Pi2Q/96wED2p1OpTAQ74/gAV4ilCU7ojJr5/kQoGJ+2OSkfG0I9fqw5rhrGm+xyX/S8uBBmP9Srf8CzuMqnG2MDqxG8kh2Yqbbcz0VqHkiThuotJjmuTBG6p6cQKZBnVEPDuem/77dWABLtclYZ0=
