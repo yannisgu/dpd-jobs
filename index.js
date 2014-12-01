@@ -133,9 +133,9 @@ Jobs.prototype.runScript = function(file, callback) {
             domain.request = request;
             domain.require = require;
 
-            var ctx = {};
+            var ctx = { req:{session:{isRoot:true}, isRoot:true} };
 
-            ctx.dpd = internalClient.build(process.server);
+            ctx.dpd = internalClient.build(process.server, ctx.req.session);
 
             script.run(ctx, domain, function (error, result) {
                 if (error) {
