@@ -23,5 +23,12 @@
         "grunt": ""  ,
         "npm": ""
     },
+  "keywords": [
+    "dpdmodule",
+    "dpd",
+    "deployd",
+    "crons",
+    "scheduled jobs"
+  ],    
   "readmeFilename": "README.md"
 }
