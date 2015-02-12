@@ -40,7 +40,7 @@ Jobs.prototype.initCron = function(name, cron) {
 
     if(!process.server.scheduledJobs[name])  {
         if(cron){
-            this.scheduledJob = schedule.scheduleJob(schedule.RecurrenceRule.fromCronString(cron), function(){
+            this.scheduledJob = schedule.scheduleJob(cron, function(){
 
                 var resources =     process.server.resources;
                 if(resources) {
