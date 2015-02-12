@@ -15,20 +15,19 @@
   },
   "license": "MIT",
   "dependencies": {
-      "node-schedule": "",
-      "request": ""
+    "node-schedule": "0.1.13",
+    "request": "^2.53.0"
   },
-    "devDependencies": {
-        "grunt-cli": ""   ,
-        "grunt": ""  ,
-        "npm": ""
-    },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13"
+  },
   "keywords": [
     "dpdmodule",
     "dpd",
     "deployd",
     "crons",
     "scheduled jobs"
-  ],    
+  ],
   "readmeFilename": "README.md"
 }
