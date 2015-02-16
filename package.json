@@ -12,8 +12,8 @@
   },
   "license": "MIT",
   "dependencies": {
-      "node-schedule": "",
-      "request": ""
+    "node-schedule": "^0.1.16",
+    "request": "^2.53.0"
   },
   "readmeFilename": "README.md"
 }
