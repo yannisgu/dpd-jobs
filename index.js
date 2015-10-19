@@ -130,8 +130,10 @@ Jobs.prototype.runScript = function(file, callback) {
             domain.out.error = function (message) {
                 self.log(message, file, "error");
             };
-            domain.request = request;
-            domain.require = require;
+
+            domain.require = function(module) {
+				return require(module);
+			};
 
             var ctx = { req:{session:{isRoot:true}, isRoot:true} };
 
